@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from .models import models
-from .schemas import schemas
+from schemas import schemas
 from . import utils
 
 
@@ -24,9 +24,9 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 def create_user(db: Session, user: schemas.UserCreate):
     hashed_password = utils.hash_password(user.password)
     db_user = models.User(
-        email=user.email, username=user.username, hashed_password=hashed_password
+        email=user.email, username=user.username, password=hashed_password
     )
     db.add(db_user)
     db.commit()
-    db.refresh()
+    db.refresh(db_user)
     return db_user
