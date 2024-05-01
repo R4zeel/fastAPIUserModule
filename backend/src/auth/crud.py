@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-import models
-import schemas
-import utils
+from . import models
+from . import schemas
+from . import utils
 
 
 def get_user(db: Session, user_id: int):
