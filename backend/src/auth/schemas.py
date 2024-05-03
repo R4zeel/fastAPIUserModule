@@ -7,6 +7,8 @@ from .models import DomainType, EnvType
 
 
 class UserBase(BaseModel):
+    """Базовая схема для модели пользователя."""
+
     login: str
     project_id: int
     env: Optional[EnvType]
@@ -14,10 +16,14 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
+    """Схема модели пользователя для создания записи в БД."""
+
     password: str
 
 
 class User(UserBase):
+    """Схема модели пользователя для чтения."""
+
     id: int
     created_at: datetime
     timestamp: time

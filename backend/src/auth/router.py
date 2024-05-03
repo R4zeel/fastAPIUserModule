@@ -30,6 +30,10 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 @router.post("/users/{user_id}/lock", response_model=schemas.User)
 def acquire_lock(user_id: int, db: Session = Depends(get_db)):
+    """
+    Присваивание пользователю временной метки, сигнализирующей о том,
+    что пользователь заблокирован для использования.
+    """
     db_user = crud.get_user(db, user_id)
     lock_time = datetime.now()
     if db_user.timestamp:
@@ -45,8 +49,12 @@ def acquire_lock(user_id: int, db: Session = Depends(get_db)):
     )
 
 
-@router.post("/users/{user_id}/remove_lock", response_model=schemas.User)
+@router.post("/users/{user_id}/release_lock", response_model=schemas.User)
 def release_lock(user_id: int, db: Session = Depends(get_db)):
+    """
+    Снятие блокировки с пользователя и установка
+    значения временной метки на None.
+    """
     db_user = crud.get_user(db, user_id)
     if not db_user.timestamp:
         raise HTTPException(

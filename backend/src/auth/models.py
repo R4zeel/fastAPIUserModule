@@ -7,12 +7,16 @@ from src.database import Base
 
 
 class EnvType(enum.Enum):
+    """Доступные значения для поля Env модели пользователя."""
+
     prod = "prod"
     preprod = "preprod"
     stage = "stage"
 
 
 class DomainType(enum.Enum):
+    """Доступные значения для поля Domain модели пользователя."""
+
     canary = "canary"
     regular = "regular"
 

@@ -13,7 +13,7 @@ def get_user(db: Session, user_id: int) -> models.User:
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
-def create_user(db: Session, user: schemas.UserCreate):
+def create_user(db: Session, user: schemas.UserCreate) -> models.User:
     hashed_password = utils.hash_password(user.password)
     db_user = models.User(
         login=user.login,
