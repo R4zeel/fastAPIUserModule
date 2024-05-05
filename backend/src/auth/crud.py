@@ -19,6 +19,7 @@ def create_user(db: Session, user: schemas.UserCreate) -> models.User:
         login=user.login,
         env=user.env,
         domain=user.domain,
+        project_id=user.project_id,
         password=hashed_password,
     )
     db.add(db_user)

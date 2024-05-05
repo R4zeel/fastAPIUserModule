@@ -18,7 +18,10 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         db.query(models.User).filter(models.User.login == user.login).first()
     )
     if db_user:
-        raise HTTPException(status_code=400, detail="User already exists")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User already exists",
+        )
     return crud.create_user(db=db, user=user)
 
 
@@ -28,14 +31,14 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return users
 
 
-@router.post("/users/{user_id}/lock", response_model=schemas.User)
+@router.post("/users/{user_id}/lock/", response_model=schemas.User)
 def acquire_lock(user_id: int, db: Session = Depends(get_db)):
     """
     Присваивание пользователю временной метки, сигнализирующей о том,
     что пользователь заблокирован для использования.
     """
     db_user = crud.get_user(db, user_id)
-    lock_time = datetime.now()
+    lock_time = datetime.now().time()
     if db_user.timestamp:
         raise HTTPException(
             status_code=status.HTTP_423_LOCKED,
@@ -49,7 +52,7 @@ def acquire_lock(user_id: int, db: Session = Depends(get_db)):
     )
 
 
-@router.post("/users/{user_id}/release_lock", response_model=schemas.User)
+@router.post("/users/{user_id}/release_lock/", response_model=schemas.User)
 def release_lock(user_id: int, db: Session = Depends(get_db)):
     """
     Снятие блокировки с пользователя и установка

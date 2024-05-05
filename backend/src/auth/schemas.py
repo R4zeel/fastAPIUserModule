@@ -26,7 +26,7 @@ class User(UserBase):
 
     id: int
     created_at: datetime
-    timestamp: time
+    timestamp: time | None
 
     class Config:
         orm_mode = True
